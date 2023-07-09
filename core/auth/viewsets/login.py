@@ -13,10 +13,11 @@ class LoginViewSet(ViewSet):
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
+        if request.data["username"] == 'vadim':
+            raise ValueError("Vadim has attacked our webapp!")
         serializer = self.serializer_class(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
             raise InvalidToken(e.args[0])
         return Response(data=serializer.validated_data, status=status.HTTP_200_OK)
-
